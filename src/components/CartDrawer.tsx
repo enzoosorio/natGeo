@@ -1,5 +1,7 @@
+import React from 'react';
 import { X, Plus, Minus, ShoppingCart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { Link } from './Link';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -41,7 +43,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <div className="space-y-4">
                 {state.items.map((item) => (
                   <div key={item.id} className="flex items-center space-x-4 border-b pb-4">
-                    <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded" />
+                    <img src={item.images[0]} alt={item.title} className="w-20 h-20 object-cover rounded" />
                     <div className="flex-1">
                       <h3 className="font-medium">{item.title}</h3>
                       <p className="text-green-700 font-semibold">${item.price}</p>
@@ -78,12 +80,13 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <span className="font-semibold">Total:</span>
               <span className="font-semibold">${state.total.toFixed(2)}</span>
             </div>
-            <button
-              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
-              disabled={state.items.length === 0}
+            <Link
+              href="/checkout"
+              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-center block disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={onClose}
             >
               Proceder al Pago
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="bg-green-50 fixed w-full z-40 top-0">
+      <nav className="bg-green-50 fixed w-full z-40 top-0 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -64,6 +64,7 @@ export function Navbar() {
         )}
       </nav>
 
+      <div className="h-16"></div>
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );

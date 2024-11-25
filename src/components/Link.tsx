@@ -4,14 +4,16 @@ interface LinkProps {
   href: string;
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
-export function Link({ href, children, className }: LinkProps) {
+export function Link({ href, children, className, onClick }: LinkProps) {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     window.history.pushState({}, '', href);
-    // Dispatch a custom event to notify the app of navigation
     window.dispatchEvent(new CustomEvent('navigation', { detail: href }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (onClick) onClick();
   };
 
   return (

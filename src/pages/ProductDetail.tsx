@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/product';
 import { ProductCard } from '../components/ProductCard';

@@ -1,9 +1,10 @@
-
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import 'swiper/swiper.min.css'
-// import 'swiper/modules/pagination/pagination.min.css'
-import { products } from '../data/product';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { products } from '../data/products';
 import { Link } from './Link';
 
 export function ProductCarousel() {

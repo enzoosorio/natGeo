@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { CartProvider } from './context/CartContext';
 import { Navbar } from './components/Navbar';
 import { Products } from './pages/Products';
@@ -7,11 +7,12 @@ import { Checkout } from './pages/Checkout';
 import { ProductDetail } from './pages/ProductDetail';
 import { Link } from './components/Link';
 import { ProductCard } from './components/ProductCard';
-import { ProductCarousel } from './components/ProductCarousel';
+import { Carousel } from './components/Carousel';
 import { Leaf, Send, Phone } from 'lucide-react';
 import { products } from './data/product';
+import { Toaster } from 'react-hot-toast';
 
-function App() {
+export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [currentProductId, setCurrentProductId] = useState<number | null>(null);
 
@@ -59,7 +60,7 @@ function App() {
       default:
         return (
           <>
-            {/* <ProductCarousel /> */}
+            <Carousel />
 
             <div className="w-full">
               <section className="py-12 bg-white">
@@ -145,9 +146,8 @@ function App() {
             </div>
           </div>
         </footer>
+        <Toaster position="top-right" />
       </div>
     </CartProvider>
   );
 }
-
-export default App;

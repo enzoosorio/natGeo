@@ -23,29 +23,28 @@ export function Navbar() {
               </Link>
             </div>
             
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-center space-x-8">
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center space-x-8">
                 <Link href="/" className="text-green-900 hover:text-green-700">Inicio</Link>
                 <Link href="/products" className="text-green-900 hover:text-green-700">Productos</Link>
                 <Link href="/contact" className="text-green-900 hover:text-green-700">Contacto</Link>
-                <button 
-                  className="text-green-900 hover:text-green-700 relative"
-                  onClick={() => setIsCartOpen(true)}
-                >
-                  <ShoppingCart className="h-6 w-6" />
-                  {itemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {itemCount}
-                    </span>
-                  )}
-                </button>
               </div>
-            </div>
-            
-            <div className="md:hidden">
+              
+              <button 
+                className="text-green-900 hover:text-green-700 relative"
+                onClick={() => setIsCartOpen(true)}
+              >
+                <ShoppingCart className="h-6 w-6" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {itemCount}
+                  </span>
+                )}
+              </button>
+              
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-green-900 hover:text-green-700"
+                className="md:hidden text-green-900 hover:text-green-700"
               >
                 <Menu className="h-6 w-6" />
               </button>

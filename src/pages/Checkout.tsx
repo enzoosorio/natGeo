@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { ProductCard } from '../components/ProductCard';
 import { products } from '../data/product';
 import { ShoppingBag, Tag, Truck } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export function Checkout() {
   const { state } = useCart();
@@ -11,18 +12,22 @@ export function Checkout() {
   
   const hasItems = state.items.length > 0;
   const shippingCost = hasItems ? 5.00 : 0;
-  const discount = couponApplied ? state.total * 0.1 : 0; // 10% discount
+  const discount = couponApplied ? 5.00 : 0; // $5 discount for HOLA5 coupon
   const finalTotal = state.total + shippingCost - discount;
 
   // Get 3 random products for recommendations
   const recommendedProducts = [...products]
     .sort(() => Math.random() - 0.5)
-    .slice(0, 3)
-    .filter(product => !state.items.some(item => item.id === product.id));
+    .slice(0, 3);
 
   const applyCoupon = () => {
-    if (couponCode.toLowerCase() === 'discount10') {
+    if (couponCode === 'HOLA5' && !couponApplied) {
       setCouponApplied(true);
+      toast.success('¡Cupón aplicado exitosamente! $5 de descuento');
+    } else if (couponApplied) {
+      toast.error('Ya has aplicado un cupón');
+    } else {
+      toast.error('Código de cupón inválido');
     }
   };
 
@@ -65,7 +70,7 @@ export function Checkout() {
                 <input
                   type="text"
                   value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value)}
+                  onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                   placeholder="Ingresa tu código"
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
@@ -77,7 +82,7 @@ export function Checkout() {
                 </button>
               </div>
               {couponApplied && (
-                <p className="text-green-600 mt-2">¡Cupón aplicado exitosamente!</p>
+                <p className="text-green-600 mt-2">¡Cupón HOLA5 aplicado!</p>
               )}
             </div>
           </div>

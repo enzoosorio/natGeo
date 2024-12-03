@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useCallback } from 'react';
 import { CartItem, Product } from '../types';
+import toast from 'react-hot-toast'
 
 interface CartState {
   items: CartItem[];
@@ -21,7 +22,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     case 'ADD_TO_CART': {
       const existingItem = state.items.find(item => item.id === action.payload.id);
       if (existingItem) {
-        return {
+        const newState = {
           ...state,
           items: state.items.map(item =>
             item.id === action.payload.id
@@ -30,25 +31,29 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           ),
           total: state.total + action.payload.price,
         };
+        return newState;
       }
-      return {
+      const newState = {
         ...state,
         items: [...state.items, { ...action.payload, quantity: 1 }],
         total: state.total + action.payload.price,
       };
+      return newState;
     }
-    case 'REMOVE_FROM_CART':
+    case 'REMOVE_FROM_CART': {
       const itemToRemove = state.items.find(item => item.id === action.payload);
-      return {
+      const newState = {
         ...state,
         items: state.items.filter(item => item.id !== action.payload),
         total: state.total - (itemToRemove ? itemToRemove.price * itemToRemove.quantity : 0),
       };
+      return newState;
+    }
     case 'UPDATE_QUANTITY': {
       const item = state.items.find(item => item.id === action.payload.id);
       if (!item) return state;
       const quantityDiff = action.payload.quantity - item.quantity;
-      return {
+      const newState = {
         ...state,
         items: state.items.map(item =>
           item.id === action.payload.id
@@ -57,6 +62,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ),
         total: state.total + (item.price * quantityDiff),
       };
+      return newState;
     }
     default:
       return state;
@@ -66,8 +72,28 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [], total: 0 });
 
+  const wrappedDispatch = useCallback((action: CartAction) => {
+    switch (action.type) {
+      case 'ADD_TO_CART':
+        const existingItem = state.items.find(item => item.id === action.payload.id);
+        if (existingItem) {
+          toast.success(`Se agregó otro ${action.payload.title} al carrito`);
+        } else {
+          toast.success(`${action.payload.title} agregado al carrito`);
+        }
+        break;
+      case 'REMOVE_FROM_CART':
+        const itemToRemove = state.items.find(item => item.id === action.payload);
+        if (itemToRemove) {
+          toast.success(`${itemToRemove.title} eliminado del carrito`);
+        }
+        break;
+    }
+    dispatch(action);
+  }, [state.items]);
+
   return (
-    <CartContext.Provider value={{ state, dispatch }}>
+    <CartContext.Provider value={{ state, dispatch: wrappedDispatch }}>
       {children}
     </CartContext.Provider>
   );
